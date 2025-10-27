@@ -119,6 +119,14 @@ mv (1)               - move (rename) files
 
 ### Bash Script
 
+##### Create a shell file:
+
+```shell
+touch LScript.sh
+```
+
+##### Script:
+
 ```bash
 #!/bin/bash
 
@@ -145,6 +153,7 @@ chmod +x LScript.sh
 ##### Run:
 
 ```shell
-./LScript.sh
+ehab@HP:~/Documents/ITI_9Months/Linux/Embedded-Linux$ ./LScript.sh 
+Done :)
 ```
 
