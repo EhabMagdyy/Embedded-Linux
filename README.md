@@ -67,3 +67,84 @@ output:
 /usr/bin/wdctl       /usr/bin/whoopsie
 ```
 
+
+
+### type
+
+tells us how the command is interpreted by the shell, whether it’s a built-in, an alias, a function, or an external binary.
+
+```shell
+ehab@HP:~/Documents/ITI_9Months/Linux/Embedded-Linux$ type cd
+cd is a shell builtin
+```
+
+```shell
+ehab@HP:~/Documents/ITI_9Months/Linux/Embedded-Linux$ type ls
+ls is aliased to `ls --color=auto'
+```
+
+
+
+### Two types of command file in /usr/bin that start with letter c
+
+```shell
+ehab@HP:~/Documents/ITI_9Months/Linux/Embedded-Linux$ ls /usr/bin/c*
+/usr/bin/c++                     /usr/bin/cmuwmtopbm
+```
+
+
+
+### Using man command, find the command to read a file
+
+To search within man pages
+
+```shell
+man -k read
+```
+
+
+
+### apropos command
+
+searches the man page descriptions for keywords, helpful when you don’t remember a command’s name.
+
+```shell
+ehab@HP:~/Documents/ITI_9Months/Linux/Embedded-Linux$ apropos mv
+git-mv (1)           - Move or rename a file, a directory, or a symlink
+lvmvdo (7)           - Support for Virtual Data Optimizer in LVM
+mv (1)               - move (rename) files
+```
+
+
+
+### Bash Script
+
+```bash
+#!/bin/bash
+
+mkdir -p ~/myDirectory
+
+mkdir -p ~/myDirectory/secondDirectory
+
+touch ~/myDirectory/secondDirectory/myNotePaper
+
+cp ~/myDirectory/secondDirectory/myNotePaper ~/myDirectory/
+
+mv ~/myDirectory/myNotePaper ~/myDirectory/myOldNotePaper
+
+echo "Done :)"
+
+```
+
+##### Make it executable:
+
+```shell
+chmod +x LScript.sh
+```
+
+##### Run:
+
+```shell
+./LScript.sh
+```
+
