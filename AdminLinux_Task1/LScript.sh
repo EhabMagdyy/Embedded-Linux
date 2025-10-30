@@ -1,7 +1,5 @@
 #!/bin/bash
 
-mkdir -p ~/myDirectory
-
 mkdir -p ~/myDirectory/secondDirectory
 
 touch ~/myDirectory/secondDirectory/myNotePaper
