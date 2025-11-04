@@ -26,8 +26,6 @@ remove files or directories
 cp /etc/passwd ~/mypasswd
 ```
 
-
-
 ### Rename files
 
 ```shell
