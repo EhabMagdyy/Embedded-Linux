@@ -1,5 +1,10 @@
 ## Task_5 Shared Memory (Inter Process Communication)
 
+### Demo
+> https://github.com/user-attachments/assets/b303d0cc-baec-429d-a5c1-66bc525a89db
+
+---
+
 ### 📘 Overview
 
 This project demonstrates **Inter-Process Communication (IPC)** in Linux using **System V Shared Memory** and **Semaphores**.  
@@ -77,6 +82,8 @@ The exchange continues until either process sends `"exit"`, signaling both proce
 3. **To terminate:**
  Type `exit` in either process. Both processes will clean up shared memory and semaphores.
 
+---
+
 ### 🧰 Useful Commands
 
 ##### View existing IPC objects:
@@ -103,7 +110,7 @@ ipcrm -s <semid>
 ipcrm -m <shmid>
 ```
 
-
+---
 
 ### 📄 Files
 
@@ -114,7 +121,7 @@ ipcrm -m <shmid>
 | **process2.c** | “Pong” process — waits first, then replies.               |
 | **README.md**  | Documentation file describing the project.                |
 
-
+---
 
 ### ⚙️ IPC Functions Explained
 
