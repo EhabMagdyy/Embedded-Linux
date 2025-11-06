@@ -16,8 +16,8 @@ Ehab Magdy
 
 | Step | What happens                                                 |
 | :--: | ------------------------------------------------------------ |
-|  0️⃣   | You provide the input buffer (e.g., from command-line or a string in your program). |
-|  1️⃣   | You fill CPU registers with the syscall number (`rax = 1`) and arguments (`rdi = fd`, `rsi = buf`, `rdx = len`). |
+|  0️⃣   | Provide the input buffer (e.g., from command-line or a string in your program). |
+|  1️⃣   | Fill CPU registers with the syscall number (`rax = 1`) and arguments (`rdi = fd`, `rsi = buf`, `rdx = len`). |
 |  2️⃣   | The `syscall` instruction is executed → CPU switches from user mode to kernel mode. |
 |  3️⃣   | The kernel dispatches the call to the `sys_write()` function. |
 |  4️⃣   | The kernel writes your buffer to the file descriptor (e.g., `stdout` → terminal). |
