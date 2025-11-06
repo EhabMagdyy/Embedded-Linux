@@ -210,3 +210,14 @@ ipcrm -m <shmid>
 | `semget` | Create/get semaphore set                  | Semaphore     |
 | `semctl` | Control semaphore (init/remove)           | Semaphore     |
 | `semop`  | Perform semaphore operation (wait/signal) | Semaphore     |
+
+---
+
+### Semaphore Behavior
+
+| Semaphore Value | Meaning                  | Wait (-1)                     | Signal (+1)                      |
+|-----------------|-------------------------|-------------------------------|----------------------------------|
+| -1              | 1 process waiting        | Process blocks immediately    | Wakes one blocked process, sem = 0 |
+| 0               | No resources available   | Process blocks                | Semaphore increments, sem = 1      |
+| 1               | 1 resource available     | Process decrements, sem = 0  | Semaphore increments, sem = 2      |
+
