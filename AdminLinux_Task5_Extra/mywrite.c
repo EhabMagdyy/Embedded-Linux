@@ -5,14 +5,14 @@ long mywrite(int fd, const void *buf, unsigned long len){
 
     asm volatile(
         "mov $1, %%rax\n\t"        /* syscall number: sys_write = 1 */
-        "mov %1, %%rdi\n\t"        /* arg0: fd */
-        "mov %2, %%rsi\n\t"        /* arg1: buf */
-        "mov %3, %%rdx\n\t"        /* arg2: len */
+        "mov %1, %%rdi\n\t"        /* arg0: fd */   // %1 -> fd
+        "mov %2, %%rsi\n\t"        /* arg1: buf */  // %2 -> buf
+        "mov %3, %%rdx\n\t"        /* arg2: len */  // %3 -> len
         "syscall\n\t"              /* invoke kernel */
-        "mov %%rax, %0\n\t"        /* store return value in ret */
-        : "=r" (ret)               /* output operand %0 */
-        : "r" ((long)fd), "r" (buf), "r" (len)  /* input operands %1, %2, %3 */
-        : "rax", "rdi", "rsi", "rdx", "rcx", "r11", "memory" /* clobbered regs */
+        "mov %%rax, %0\n\t"        /* store return value in %0 */ // %0 -> ret
+        : "=r" (ret)               /* output operand %0 */ //"=r" tells the compiler: “Put the result of the assembly in any general register, and then copy it to ret after.”
+        : "r" ((long)fd), "r" (buf), "r" (len)  /* input operands %1, %2, %3 */  // "r" means: “Load this C variable into a register for use inside my assembly.”
+        : "rax", "rdi", "rsi", "rdx", "rcx", "r11", "memory" /* clobbered regs */ // Tells the compiler which registers the assembly overwrites.
     );
 
     return ret;
