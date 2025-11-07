@@ -25,6 +25,15 @@ Ehab Magdy
 |  6️⃣   | You move that result from `rax` into your C variable.        |
 |  7️⃣   | The message appears on your terminal                         |
 
+### :
+
+| Section          | Separated by | Example                                | Purpose                          |
+|------------------|--------------|----------------------------------------|----------------------------------|
+| Output operands  | 1st `:`       | `: "=r"(ret)`                          | Where result goes                |
+| Input operands   | 2nd `:`       | `: "r"(fd), "r"(buf), "r"(len)`        | What data goes in                |
+| Clobbers         | 3rd `:`       | `: "rax", "rdi", ...`                  | What registers/memory are changed |
+
+
 ### System Call Registers by Architecture
 
 | Arch   | Syscall NR | Return | arg0 | arg1 | arg2 | arg3 | arg4 | arg5 |
