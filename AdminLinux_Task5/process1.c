@@ -7,7 +7,7 @@ int main(){
         perror("shmget");
         return 1;
     }
-    // Create shared memory buffer
+    // Get shared memory buffer
     char* shmAddr =(char*)shmat(shID, NULL, 0);
     if(shmAddr == ERROR_ADDR){
         perror("shmat");
