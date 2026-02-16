@@ -197,28 +197,3 @@ make menuconfig -> General setup -> Local Version
 
 ##### 6- Add a custom command hello that prints your name
 
-##### 8- What is the difference between run and go commands?
-
-`run`: execute U-Boot script/variable
-
-`go`: execute code in RAM directly
-
-##### 9- What is the purpose of bootargs and who reads it?
-
-Purpose: Passes kernel command-line arguments (kernel parameters) at boot
-
-Who reads it: The Linux kernel reads `bootargs` at startup to configure:
-
-- Root filesystem (`root=/dev/mmcblk0p2`)
-
-- Console (`console=ttyAMA0,115200`)
-
-- Other kernel parameters (memory, network, debugging)
-
-  ```bash
-  Ehab: setenv bootargs console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw
-  ```
-
-##### 10- Why do we use 0x62000000 and not 0x60000000 for kernel address on Raspberry Pi?
-
-Because base DRAM (0x60000000) has U-Boot and reserved data; 0x62000000 is safe for kernel load.
