@@ -17,6 +17,7 @@ dd if=/dev/zero of=vsdcard.img bs=1M count=1024
 cfdisk vsdcard.img
 ```
 
+> <img width="917" height="608" alt="Image" src="https://github.com/user-attachments/assets/4b8b4a9f-cbc9-4aba-bdb1-d5d541db514f" />
 
 
 ###  3. Attach Image to Loop Device
