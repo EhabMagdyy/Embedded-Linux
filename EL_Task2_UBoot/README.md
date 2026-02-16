@@ -188,14 +188,12 @@ Displays U-Boot environment variables.
 -> start    = 0x60000000
 
 ##### 4- List and Load Files from FAT Partition.
-
-
+> <img width="775" height="678" alt="Image" src="https://github.com/user-attachments/assets/85fc410d-0024-4d44-b8fe-8eeaa2a89b3e" />
 
 ##### 5- Make the U-Boot banner say “Welcome to Our-Boot – Intake 46”
 
 make menuconfig -> General setup -> Local Version
-
-
+> <img width="956" height="346" alt="Image" src="https://github.com/user-attachments/assets/0f858afe-4340-48d7-a5d0-6bafebbdaacf" />
 
 ##### 6- Add a custom command hello that prints your name
 
@@ -218,7 +216,7 @@ Who reads it: The Linux kernel reads `bootargs` at startup to configure:
 - Other kernel parameters (memory, network, debugging)
 
   ```bash
-  => setenv bootargs console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw
+  Ehab: setenv bootargs console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw
   ```
 
 ##### 10- Why do we use 0x62000000 and not 0x60000000 for kernel address on Raspberry Pi?
