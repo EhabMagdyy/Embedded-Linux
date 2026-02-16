@@ -197,3 +197,6 @@ make menuconfig -> General setup -> Local Version
 
 ##### 6- Add a custom command hello that prints your name
 
+Write your command handler inside a file in cmd folder under u-boot, then add `obj-y += cmd_hello.o` in `cmd/Makefile`
+
+> <img width="957" height="615" alt="Image" src="https://github.com/user-attachments/assets/fed1af58-a3f8-4fe4-93ec-eb65f8f5d4cd" />
