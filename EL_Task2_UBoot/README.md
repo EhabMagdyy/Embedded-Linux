@@ -17,33 +17,33 @@
 
 3. Read Bootcode.bin (older RPis)
 
-       - Loaded from FAT Partition into DRAM
-       - Then it loads start.elf file into DRAM
-       - start.elf applies settings from `config.txt`
-       - prepares ARM CPU to start.
-       - loads U-Boot
+    - Loaded from FAT Partition into DRAM
+    - Then it loads start.elf file into DRAM
+    - start.elf applies settings from `config.txt`
+    - prepares ARM CPU to start.
+    - loads U-Boot
 
 4.  U-Boot
 
-       - init hardware (Clock, CPU, RAM, Peripherals)
-       - loads linux kernel from SD Card/USB/.. into RAM
-       - passes boot args
-       - starts the kernel
+    - init hardware (Clock, CPU, RAM, Peripherals)
+    - loads linux kernel from SD Card/USB/.. into RAM
+    - passes boot args
+    - starts the kernel
 
 5. Linux Kernel
 
-       - Decompress itself
-       - initialiaze MMU, scheduler, Drivers, mount rootfs
-       - runs PID 1 (init/systemd)
+    - Decompress itself
+    - initialiaze MMU, scheduler, Drivers, mount rootfs
+    - runs PID 1 (init/systemd)
 
 6. init/systemd
 
-       - start services (network, ssh, display, ...)
-       - brings system to target multi-user.target ot graphical.target
+     - start services (network, ssh, display, ...)
+     - brings system to target multi-user.target ot graphical.target
 
 7. login/Desktop
 
-   ​    - Console login or GUI Desktop (if enabled).
+ ​    - Console login or GUI Desktop (if enabled).
 
 ##### Bounce: Draw and Explain the exact boot chain on your PC from power-on until Running the OS
 
