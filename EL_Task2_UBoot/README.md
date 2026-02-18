@@ -212,9 +212,12 @@ Save environment variable you set to be loaded in the next power cycle.
 ##### `editenv`
 Edit an environment variable "You must select it from menuconfig", instead of reseting.
 
-##### `run`
+##### `go`
 Run an application loaded in DRAM that doesn't require `DTB`.
 But after this you cannot go back to `u-boot`, it's no longer in DRAM "it actually still there but kernel overwrites it like what happens in C Stacks".
+
+##### `run`
+Used to run variable that continue script
 
 ##### Loading and Starting Kernel
 1. Load kernel image, dtb, ramfs and other required files into DRAM.
