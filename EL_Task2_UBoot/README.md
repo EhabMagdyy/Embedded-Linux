@@ -169,9 +169,7 @@ the image file.
 
 Kernel reads the partition table MBR stored inside the image file which has info about the start and size of each partition, The kernel uses this information to create device nodes for each  partition, such as `/dev/loop5p1` which can then be  accessed like regular block devices.
 
-
-
-
+---
 
 ### Part B : U-Boot Commands Environment
 
@@ -201,6 +199,8 @@ Write your command handler inside a file in cmd folder under u-boot, then add `o
 
 > <img width="957" height="615" alt="Image" src="https://github.com/user-attachments/assets/fed1af58-a3f8-4fe4-93ec-eb65f8f5d4cd" />
 
+---
+
 ### Extra Notes
 
 ##### `setenv`
@@ -211,3 +211,11 @@ Save environment variable you set to be loaded in the next power cycle.
 
 ##### `editenv`
 Edit an environment variable "You must select it from menuconfig", instead of reseting.
+
+##### `run`
+Run an application loaded in DRAM that doesn't require `DTB`.
+But after this you cannot go back to `u-boot`, it's no longer in DRAM "it actually still there but kernel overwrites it like what happens in C Stacks".
+
+##### Loading and Starting Kernel
+1. Load kernel image, dtb, ramfs and other required files into DRAM.
+2. Start kernel (`bootz`/`booti`)
