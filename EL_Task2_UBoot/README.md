@@ -199,6 +199,36 @@ Write your command handler inside a file in cmd folder under u-boot, then add `o
 
 > <img width="957" height="615" alt="Image" src="https://github.com/user-attachments/assets/fed1af58-a3f8-4fe4-93ec-eb65f8f5d4cd" />
 
+##### 7- Network Booting with TFTP
+a. Set Up a TFTP Server on Your Laptop
+b. From U-Boot (QEMU or Real RPi) Configure Network & Test
+c. Load Kernel + DTB via TFTP
+
+##### 8- What is the difference between run and go commands?
+
+`go`: Run an application loaded in DRAM that doesn't require `DTB`.
+But after this you cannot go back to `u-boot`, it's no longer in DRAM "it actually still there but kernel overwrites it like what happens in C Stacks".
+
+`run`: Used to run variable that continue script
+
+##### 9- What is the purpose of bootargs and who reads it?
+
+This is a string of kernel command-line parameters.
+
+It usually contains: console device, root filesystem, log level
+Example:
+``` bash
+console=ttyAMA0,115200 root=/dev/mmcblk0p2 rootwait rw
+```
+
+The Linux kernel reads bootargs, U-Boot does NOT interpret it, it just passes it to kerenel.
+
+##### 10- Why do we use 0x62000000 and not 0x60000000 for kernel address on Raspberry
+Pi?
+
+0x60000000 may overlap GPU/U-Boot reserved RAM, but 0x62000000 It lies in a safe region of RAM.
+
+
 ---
 
 ### Extra Notes
@@ -211,13 +241,6 @@ Save environment variable you set to be loaded in the next power cycle.
 
 ##### `editenv`
 Edit an environment variable "You must select it from menuconfig", instead of reseting.
-
-##### `go`
-Run an application loaded in DRAM that doesn't require `DTB`.
-But after this you cannot go back to `u-boot`, it's no longer in DRAM "it actually still there but kernel overwrites it like what happens in C Stacks".
-
-##### `run`
-Used to run variable that continue script
 
 ##### Loading and Starting Kernel
 1. Load kernel image, dtb, ramfs and other required files into DRAM.
