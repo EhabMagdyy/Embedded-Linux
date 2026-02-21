@@ -200,9 +200,23 @@ Write your command handler inside a file in cmd folder under u-boot, then add `o
 > <img width="957" height="615" alt="Image" src="https://github.com/user-attachments/assets/fed1af58-a3f8-4fe4-93ec-eb65f8f5d4cd" />
 
 ##### 7- Network Booting with TFTP
-a. Set Up a TFTP Server on Your Laptop
-b. From U-Boot (QEMU or Real RPi) Configure Network & Test
-c. Load Kernel + DTB via TFTP
+###### a. Set Up a TFTP Server on Your Laptop
+
+``` bash
+sudo apt install tftpd-hpa
+# Copy your files in tftp server
+sudo cp file.txt /srv/tftp/
+# You can change configuration from here
+sudo nano /etc/default/tftpd-hpa
+# Restart tftp servicewith the new configurations
+sudo systemctl restart tftpd-hpa
+```
+
+###### b. From U-Boot (QEMU or Real RPi) Configure Network & Test
+
+
+###### c. Load Kernel + DTB via TFTP
+
 
 ##### 8- What is the difference between run and go commands?
 
