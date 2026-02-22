@@ -214,9 +214,29 @@ sudo systemctl restart tftpd-hpa
 
 ###### b. From U-Boot (QEMU or Real RPi) Configure Network & Test
 
+``` bash
+sudo qemu-system-arm -M vexpress-a9 -kernel u-boot -nographic -m 512M -nic tap -net nic
+# in qemu:
+setenv ipaddr 192.168.100.2   # QEMU guest IP   
+setenv serverip 192.168.100.1 # Host TAP IP       
+setenv netmask 255.255.255.0                    
+ping ${serverip} 
+# smc911x: detected LAN9118 controller
+# smc911x: phy initialized
+# smc911x: MAC 52:54:00:12:34:56
+# Using ethernet@3,02000000 device
+# smc911x: MAC 52:54:00:12:34:56
+# host 192.168.100.1 is alive
+```
 
 ###### c. Load Kernel + DTB via TFTP
 
+``` bash
+# put your files in /srv/tftp
+# then load them in qemu:
+tftp ${loadaddr} vexpress_a9.dtb
+tftp 0x60101000 kernel.img
+```
 
 ##### 8- What is the difference between run and go commands?
 
