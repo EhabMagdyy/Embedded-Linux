@@ -215,12 +215,17 @@ sudo systemctl restart tftpd-hpa
 ###### b. From U-Boot (QEMU or Real RPi) Configure Network & Test
 
 ``` bash
+# First you need to configure TAP:
+sudo ip addr add 192.168.100.1/24 dev tap0
+sudo ip link set tap0 up
+# Then Run qemu and configure Network
 sudo qemu-system-arm -M vexpress-a9 -kernel u-boot -nographic -m 512M -nic tap -net nic
 # in qemu:
 setenv ipaddr 192.168.100.2   # QEMU guest IP   
 setenv serverip 192.168.100.1 # Host TAP IP       
 setenv netmask 255.255.255.0                    
-ping ${serverip} 
+ping ${serverip}
+
 # smc911x: detected LAN9118 controller
 # smc911x: phy initialized
 # smc911x: MAC 52:54:00:12:34:56
