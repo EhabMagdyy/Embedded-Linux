@@ -30,6 +30,12 @@ md ${loadaddr}
 ```bash
 # Write into FAT Partition
 fatwrite mmc 0:1 ${loadaddr} kernel.img ${filesize} 
+
+# Write into EXT4 Partition
+# in PC, Enable Writing into EXT4
+sudo mkfs.ext4 -O ^metadata_csum,^64bit,^dir_index /dev/loop38p2
+# / -> cause ext4 uses filesystem (ex: /boot/kernel.img) unlike the flat fat
+ext4write mmc 0:2 ${loadaddr} /kernel.img ${filesize}
 ```
 
 #### 4- Verify
