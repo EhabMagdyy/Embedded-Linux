@@ -62,6 +62,11 @@ CLIENT                                  SERVER
 
 ---
 
+## Demo
+> https://github.com/user-attachments/assets/1099deb3-b375-4108-bf14-fd2d9806f59e
+
+---
+
 ## Server Side Workflow
 
 ```
