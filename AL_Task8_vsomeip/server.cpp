@@ -2,8 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <csignal>
-
-// Make the signal sends event to the client to also terminate
+#include <thread>
 
 constexpr static auto CAPSLOCK_PATH = "/sys/class/leds/input3::capslock/brightness";
 constexpr static auto APP_NAME = "CapsLockService";
@@ -15,24 +14,31 @@ constexpr int CAPSLOCK_METHOD_ID = 0x02;
 constexpr int EXIT_SIGNAL_EVENT_ID = 0xF001;
 constexpr int EVENT_GROUP_ID = 0x01;
 
+void NotifyExitEvent(){
+    std::shared_ptr<vsomeip::application> app = vsomeip::runtime::get()->get_application(APP_NAME);
+    
+    auto payload = vsomeip::runtime::get()->create_payload();
+    std::string msg = "Server is shutting down!";
+    std::vector<vsomeip::byte_t> data(msg.begin(), msg.end());
+    payload->set_data(data);
+    
+    app->notify(SERVICE_ID, INSTANCE_ID, EXIT_SIGNAL_EVENT_ID, payload);
+}
+
 // Cleanup before termination
 void SignalHandler(int signal){
     std::shared_ptr<vsomeip::application> app = vsomeip::runtime::get()->get_application(APP_NAME);
-    // Send EXIT Signal event to all subscribed clients
-    std::shared_ptr<vsomeip::payload> payload = vsomeip::runtime::get()->create_payload();
-    std::vector<vsomeip::byte_t> data = {'E', 'X', 'I', 'T'};
-    payload->set_data(data);
-    std::cout << "\nSending EXIT signal event to clients...\n";
-    app->notify(SERVICE_ID, INSTANCE_ID, EVENT_GROUP_ID, payload);
 
+    // Fire the exit event FIRST, before stopping anything
+    NotifyExitEvent();
+    std::this_thread::sleep_for(std::chrono::milliseconds(200)); // give time to send
+
+    app->stop_offer_event(SERVICE_ID, INSTANCE_ID, EXIT_SIGNAL_EVENT_ID);
     app->stop_offer_service(SERVICE_ID, INSTANCE_ID);
-    // unregister the state handler
-    app->unregister_state_handler();
-    // unregister the message handler
     app->unregister_message_handler(SERVICE_ID, INSTANCE_ID, GREETINGS_METHOS_ID);
     app->unregister_message_handler(SERVICE_ID, INSTANCE_ID, CAPSLOCK_METHOD_ID);
     app->stop();
-    std::cout << "Service stopped due to -> Signal " << signal << std::endl;
+    std::cout << "Service stopped due to -> Signal: " << signal << std::endl;
 }
 
 void GreetingsHandler(const std::shared_ptr<vsomeip::message>& request){
@@ -54,7 +60,7 @@ void GreetingsHandler(const std::shared_ptr<vsomeip::message>& request){
     response->set_payload(payload);
 
     // Send the response
-    std::cout << "Sending Greetings Response...\n";
+    std::cout << "Sending Greetings Response...\n\n";
     vsomeip::runtime::get()->get_application(APP_NAME)->send(response);
 }
 
@@ -99,8 +105,6 @@ void CapsLockMessageHandler(const std::shared_ptr<vsomeip::message>& request){
     count++;
 }
 
-
-
 int main(){
     // signal handling
     std::signal(SIGINT, SignalHandler);
@@ -112,12 +116,12 @@ int main(){
     // Register a handler for this SERVICE_ID + INSTANCE_ID + METHOD_ID -> callback
     app->register_message_handler(SERVICE_ID, INSTANCE_ID,GREETINGS_METHOS_ID, GreetingsHandler);
     app->register_message_handler(SERVICE_ID, INSTANCE_ID, CAPSLOCK_METHOD_ID, CapsLockMessageHandler);
+    // Offer the service for the client to discover
+    app->offer_service(SERVICE_ID, INSTANCE_ID);
     // Enable event notification for this service
     std::set<vsomeip::eventgroup_t> groups = {EVENT_GROUP_ID};
     app->offer_event(SERVICE_ID, INSTANCE_ID, EXIT_SIGNAL_EVENT_ID, groups, 
                     vsomeip::event_type_e::ET_EVENT, std::chrono::milliseconds(0));
-    // Offer the service for the client to discover
-    app->offer_service(SERVICE_ID, INSTANCE_ID);
     // Start the app
     app->start();
 

@@ -76,12 +76,12 @@ void EventHandler(const std::shared_ptr<vsomeip::message>& event){
 
     // Cleanup and Exit
     std::shared_ptr<vsomeip::application> app = vsomeip::runtime::get()->get_application(APP_NAME);
-    app->stop_offer_service(SERVICE_ID, INSTANCE_ID);
     // unregister the state handler
     app->unregister_state_handler();
     // unregister the message handler
     app->unregister_message_handler(SERVICE_ID, INSTANCE_ID, GREETINGS_METHOS_ID);
     app->unregister_message_handler(SERVICE_ID, INSTANCE_ID, CAPSLOCK_METHOD_ID);
+    app->unregister_message_handler(SERVICE_ID, INSTANCE_ID, EXIT_SIGNAL_EVENT_ID);
     app->stop();
     std::cout << "Service stopped due to EXIT signal event\n";
     exit(0);
