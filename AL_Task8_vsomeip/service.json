@@ -1,0 +1,27 @@
+{
+    "unicast": "127.0.0.1",
+    "logging": {
+        "level": "debug",
+        "console": "true"
+    },
+    "applications": [
+        {
+            "name": "server",
+            "id": "0x1"
+        }
+    ],
+
+    "services": [
+        {
+            "service": "0xEABA",
+            "instance": "0x01",
+            "unreliable": "30509"
+        }
+    ],
+    "routing": "server",
+    "service-discovery": {
+        "enable": "true",
+        "multicast": "224.0.0.1",
+        "port": "30490"
+    }
+}
