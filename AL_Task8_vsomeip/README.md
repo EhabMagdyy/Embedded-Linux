@@ -109,6 +109,21 @@ main()
 
 ---
 
+## Build & Run
+
+``` bash
+# Build
+cmake -S . -B build && cd build && make
+# Run Server Side
+VSOMEIP_CONFIGURATION=../service.json VSOMEIP_APPLICATION_NAME=server ./server
+# Run Client Side
+VSOMEIP_CONFIGURATION=../service.json VSOMEIP_APPLICATION_NAME=client ./client
+# To Terminate
+# in Server Side: CTRL+C
+```
+
+---
+
 ## Problems
 
 #### Stale socket file left in /tmp
