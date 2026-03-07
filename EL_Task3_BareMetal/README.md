@@ -1,6 +1,11 @@
 # RPi Bare-Metal : Loading & Running a Custom Binary via U-Boot
 
-## 1 — Write the Source Code
+## 0. Demo
+> https://github.com/user-attachments/assets/0afe0202-9cbf-4ec8-a45d-2d6e5f952cd4
+
+---
+
+## 1. Write the Source Code
 
 ### 1.1 Project Structure
 
@@ -18,7 +23,7 @@ EL_Task3_BareMetal/
 ##### `linker.ld` — Linker Script
 ##### `Makefile` — Cross-compile and Generate blinky.img
 
-## 2 — Build the Binary
+## 2. Build the Binary
 
 ### 2.1 Link the Cross-Compiler
 ```makefile
@@ -48,7 +53,7 @@ make dump    # check _start is at 0x80000 and main follows
 
 ---
 
-## 3 — Prepare the SD Card or USB Flash Drive
+## 3. Prepare the SD Card or USB Flash Drive
 
 ### 3.1 Partition and Format
 
@@ -132,7 +137,7 @@ sudo umount /mnt
 
 ---
 
-## 4 — Hardware Wiring, UART Serial Connection
+## 4. Hardware Wiring, UART Serial Connection
 
 ```
 RPi Pin 6  (GND) → USB-TTL GND
@@ -142,7 +147,7 @@ RPi Pin 10 (RX)  → USB-TTL TX
 
 ---
 
-## 5 — Configure Ethernet for TFTP
+## 5. Configure Ethernet for TFTP
 
 ### 5.1 Connect Ethernet Cable
 
@@ -170,7 +175,7 @@ sudo systemctl status tftpd-hpa
 
 ---
 
-## 6 — Boot and Run
+## 6. Boot and Run
 
 ### 6.1 Open Serial Console
 
