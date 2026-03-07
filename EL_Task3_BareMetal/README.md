@@ -212,3 +212,27 @@ Expected output:
 ```
 
 Then your LED starts blinking
+
+## Boot Chain Summary
+
+```
+USB Drive ROM scan
+    └── bootcode.bin        (RPi 2nd stage — mandatory)
+        └── start.elf       (GPU firmware — reads config.txt)
+            └── u-boot.bin  (run U-Boot that's in config.txt)
+                └── tftp → blinky.img at 0x80000
+                    └── go 0x80000 → _start → main() → LED blinks
+```
+
+---
+
+### Q: Brief explanation of the load address of .img you chose and why
+0x80000 is chosen because the RPi3B+ firmware (start.elf) hardwires this as the default kernel load address — it places whatever binary is named in config.txt there and jumps to it. Using this address means zero extra configuration; the hardware and firmware already expect your code to start there.
+
+### Q: Why do we need a startup.s file at all? Can’t we just write everything in C?
+`_start` is the default entry point defined by the linker for ELF binaries in Linux, 
+
+### go vs booti
+`go`: treats the address as raw binary, jumps directly to it with no parsing. What you used for your bare-metal .img.
+`booti`: expects a Linux kernel in ARM64 Image format (has a header). It also takes a device tree and initrd address: booti <kernel_addr> <initrd_addr> <dtb_addr>. It does extra setup before jumping (passes dtb to kernel, sets up registers per Linux boot protocol).
+> In short: `go` = dumb jump to raw code. `booti` = smart jump to Linux kernel.
