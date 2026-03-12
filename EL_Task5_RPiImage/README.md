@@ -70,4 +70,44 @@ load mmc 0:1 ${kernel_addr_r} Image
 booti ${kernel_addr_r} - ${fdtcontroladdr}
 ```
 
+---
 
+## Using Physical Hardware
+### 0. Output
+> ![WhatsApp Image 2026-03-12 at 6 42 16 PM](https://github.com/user-attachments/assets/f8b5c206-62e5-405f-a65c-4dfe39cdc3dc)
+
+---
+
+### 1. Partition & Fromat SD Card/USB Disk
+### 2. Put your the neeeded files in the FAT partition
+```
+/path/to/BOOT/
+├── bcm2837-rpi-3-b-plus.dtb  # or bcm2710-rpi-3-b-plus.dtb
+├── bootcode.bin
+├── config.txt
+├── fixup.dat
+├── Image
+├── start.elf
+└── u-boot.bin
+```
+
+--- 
+
+### 3. Conned & Power on the RPi
+> as we did in `EL_Task3_BareMetal`
+
+---
+
+### 4. Load & Run the Kernel
+i'm using picocom:
+``` bash
+sudo picocom -b 115200 /dev/ttyUSB0
+```
+
+in U-Boot
+```
+setenv bootargs "console=tty1,115200"  # output on the external monitor
+fatload usb 0:1 ${fdt_addr_r} bcm2837-rpi-3-b-plus.dtb  # mmc if using sd card
+fatload usb 0:1 ${kernel_addr_r} Image
+booti ${kernel_addr_r} - ${fdt_addr_r}
+```
