@@ -91,6 +91,14 @@ setenv bootargs "console=tty1 root=/dev/sda2 rootwait rw"
 
 ---
 
+## To Append your name or ID to the kernel version (e.g., 6.6.15-YourName-v1)
+```
+sed -i 's/CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION="-Ehab-v1"/' ~/linux/.config
+# then rebuild the image
+```
+
+---
+
 ## Questions about kernel concepts
 ### 1. Monolithic vs Microkernel — Where does Linux stand?
 
@@ -193,3 +201,4 @@ Static   (-static):    kernel runs /init → fully self-contained → runs immed
 
 - `/bin/sh` does not exist on rootfs
 - `/bin/sh` is not staticlly linked
+
