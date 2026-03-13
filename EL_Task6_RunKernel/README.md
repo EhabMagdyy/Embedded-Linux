@@ -99,6 +99,64 @@ sed -i 's/CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION="-Ehab-v1"/' ~/linux/.confi
 
 ---
 
+## Run using NFS Server
+
+### 0. output
+> ![Image](https://github.com/user-attachments/assets/f4603db8-e920-4c19-ae73-4e6b44bdbb1e)
+
+---
+
+### 1. Set NFS Server on Host side
+
+1. Install NFS server:
+   ``` bash
+   sudo apt install nfs-kernel-server
+   ```
+2. Create the NFS root directory and populate it with your rootfs:
+   ``` bash
+   sudo mkdir -p /srv/nfs/rootfs
+   
+   # copy init from disk rootfs to NFS
+   sudo cp -a /media/ehab/ROOTFS/. /srv/nfs/rootfs/
+   ```
+3. Create the NFS root directory and populate it with your rootfs:
+   ``` bash
+   sudo nano /etc/exports
+   ```
+   - Add this line:
+   ```
+   /srv/nfs/rootfs  192.168.2.2(rw,no_root_squash,no_subtree_check,sync)
+   ```
+
+4. Apply and start:
+   ``` bash
+   sudo exportfs -ra
+   sudo systemctl restart nfs-kernel-server
+   
+   # verify it's exported
+   sudo exportfs -v
+   ```
+   
+5. Set network
+   ``` bash
+   sudo ip addr add 192.168.2.1/24 dev eno1
+   sudo ip link set eno1 up
+   ```
+
+---
+
+### 2. in RPi side
+1. Change bootargs in your `boot.cmd`:
+   ```
+   # replace the current bootargs line with this:
+   setenv bootargs "console=ttyAMA0,115200 root=/dev/nfs nfsroot=192.168.2.1:/srv/nfs/rootfs,v3,tcp ip=192.168.2.2:192.168.2.1::255.255.255.0::eth0:off rw init=/init"
+   ```
+2. Then recompile and copy `boot.scr` into `boot` partition
+
+> Now your Kernel loads from NFS Server
+
+---
+
 ## Questions about kernel concepts
 ### 1. Monolithic vs Microkernel — Where does Linux stand?
 
