@@ -1,4 +1,4 @@
-# Build and Boot RPi3b+ Kernel
+# Build and Boot RPi3b+ Kernel (load rootsfs from disk/nfs with custom init)
 
 > ![WhatsApp Image 2026-03-13 at 6 55 33 AM](https://github.com/user-attachments/assets/3ec8b8e8-3d10-4858-bded-61b98b7bbb0a)
 
