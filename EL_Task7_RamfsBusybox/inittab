@@ -6,7 +6,7 @@
 # run startup scripts (just print a message from me (>_<))
 ::sysinit:/etc/init.d/rcS
 
-ttyS0::respawn:/bin/sh
+tty1::respawn:/bin/sh
 
 ::ctrlaltdel:/sbin/reboot
 
