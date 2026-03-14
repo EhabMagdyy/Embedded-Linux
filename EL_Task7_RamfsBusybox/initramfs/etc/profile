@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "Excuting /etc/profile commands.."
+echo "Hello from Ehab'initramfs shell!"
+echo "list files in /: "
+ls

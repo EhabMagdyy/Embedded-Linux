@@ -1,0 +1,13 @@
+::sysinit:mount -t devtmpfs dev /dev
+::sysinit:mount -t proc proc /proc
+::sysinit:mount -t sysfs sys /sys
+::sysinit:mount -t tmpfs tmp /tmp
+
+# run startup script
+::sysinit:/etc/init.d/rcS
+
+console::respawn:/bin/cttyhack /bin/sh -l
+
+::ctrlaltdel:/sbin/reboot
+::shutdown:/bin/umount -a -r
+::shutdown:/bin/swapoff -a

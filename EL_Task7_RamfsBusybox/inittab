@@ -1,14 +1,11 @@
-# mount virtual filesystems at boot
+::sysinit:mount -t devtmpfs dev /dev    # not needed incase of actual rootfs
 ::sysinit:mount -t proc proc /proc
 ::sysinit:mount -t sysfs sys /sys
 ::sysinit:mount -t tmpfs tmp /tmp
 
-# run startup scripts (just print a message from me (>_<))
+# run startup script
 ::sysinit:/etc/init.d/rcS
 
-tty1::respawn:/bin/sh
-
-::ctrlaltdel:/sbin/reboot
+console::respawn:/bin/cttyhack /bin/sh -l   # in case of actual rootfs, use /bin/sh instead
 
 ::shutdown:/bin/umount -a -r
-::shutdown:/bin/swapoff -a

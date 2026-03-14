@@ -1,10 +1,6 @@
-
 # =============================================================================
 # boot.cmd — U-Boot Boot Script for Raspberry Pi 3B+
 # =============================================================================
-#
-#   Compile:
-#   ~/Documents/ITI_9Months/EmbeddedLinux/u-boot/tools/mkimage -C none -A arm64 -T script -d boot.cmd boot.scr
 #
 # KERNEL NOTE:
 #   "Image" is the raw uncompressed ARM64 kernel → use booti (NOT bootz).
@@ -26,9 +22,7 @@
 #     usb 0:1/
 #     ├── Image
 #     ├── bcm2837-rpi-3-b-plus.dtb
-#     ├── 
-       ...
-#     └── boot.scr
+#     └── boot.scr                  ← here
 #
 # HOW IT RUNS AUTOMATICALLY:
 #   This board uses the modern U-Boot boot standard. bootcmd is already set to:
@@ -62,7 +56,7 @@ echo ""
 #                             NFS boot  → nfsroot=192.168.2.1:/path,v3 ip=dhcp
 # =============================================================================
 
-setenv bootargs "console=tty1 root=/dev/nfs nfsroot=192.168.2.1:/srv/nfs/rootfs,v3,tcp ip=192.168.2.2:192.168.2.1::255.255.255.0::eth0:off rw init=/sbin/init"
+setenv bootargs "console=tty1 rw init=/init"
 
 
 # =============================================================================
@@ -72,36 +66,44 @@ setenv bootargs "console=tty1 root=/dev/nfs nfsroot=192.168.2.1:/srv/nfs/rootfs,
 echo ">>> [1/2] Scanning USB bus..."
 usb start
 echo ""
-echo ">>> [1/2] Attempting USB boot from usb 0:1 ..."
-echo ""
+# echo ">>> [1/2] Attempting USB boot from usb 0:1 ..."
+# echo ""
 
-if fatload usb 0:1 ${kernel_addr_r} Image; then
+# if fatload usb 0:1 ${kernel_addr_r} Image; then
 
-    echo "    [OK] Kernel  'Image'                   loaded from USB"
+#     echo "    [OK] Kernel  'Image'                   loaded from USB"
 
-    if fatload usb 0:1 ${fdt_addr_r} bcm2837-rpi-3-b-plus.dtb; then
+#     if fatload usb 0:1 ${fdt_addr_r} bcm2837-rpi-3-b-plus.dtb; then
 
-        echo "    [OK] DTB     'bcm2837-rpi-3-b-plus.dtb' loaded from USB"
-        echo ""
-        echo ">>> Booting kernel from USB ..."
-        echo ""
-        booti ${kernel_addr_r} - ${fdt_addr_r}
+#         echo "    [OK] DTB     'bcm2837-rpi-3-b-plus.dtb' loaded from USB"
 
-        # booti only returns on failure — if we reach here something went wrong
-        echo ""
-        echo "    [!!] booti returned unexpectedly — image may be corrupt or"
-        echo "         incompatible. Falling through to TFTP ..."
+#         if fatload usb 0:1 ${ramdisk_addr_r} initramfs.uboot; then
+#             echo "    [OK] Initramfs 'initramfs.uboot'      loaded from USB"
+#         else
+#             echo "    [--] Initramfs not found on USB — booting without it"
+#             setenv ramdisk_addr_r "-"
+#         fi
 
-    else
-        echo "    [--] DTB 'bcm2837-rpi-3-b-plus.dtb' not found on USB (usb 0:1)"
-    fi
+#         echo ""
+#         echo ">>> Booting kernel from USB ..."
+#         echo ""
+#         booti ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r}
 
-else
-    echo "    [--] Kernel 'Image' not found on USB (usb 0:1)"
-    echo "         (disk not connected, wrong partition, or wrong filesystem?)"
-fi
+#         # booti only returns on failure — if we reach here something went wrong
+#         echo ""
+#         echo "    [!!] booti returned unexpectedly — image may be corrupt or"
+#         echo "         incompatible. Falling through to TFTP ..."
 
-echo ""
+#     else
+#         echo "    [--] DTB 'bcm2837-rpi-3-b-plus.dtb' not found on USB (usb 0:1)"
+#     fi
+
+# else
+#     echo "    [--] Kernel 'Image' not found on USB (usb 0:1)"
+#     echo "         (disk not connected, wrong partition, or wrong filesystem?)"
+# fi
+
+# echo ""
 
 
 # =============================================================================
@@ -127,10 +129,18 @@ if tftp ${kernel_addr_r} Image; then
     if tftp ${fdt_addr_r} bcm2837-rpi-3-b-plus.dtb; then
 
         echo "    [OK] DTB     'bcm2837-rpi-3-b-plus.dtb' loaded via TFTP"
+
+        if tftp ${ramdisk_addr_r} initramfs.uboot; then
+            echo "    [OK] Initramfs 'initramfs.uboot'      loaded via TFTP"
+        else
+            echo "    [--] Initramfs not found on TFTP — booting without it"
+            setenv ramdisk_addr_r "-"
+        fi
+
         echo ""
         echo ">>> Booting kernel from TFTP ..."
         echo ""
-        booti ${kernel_addr_r} - ${fdt_addr_r}
+        booti ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r}
 
         echo ""
         echo "    [!!] booti returned unexpectedly — image may be corrupt."
@@ -159,10 +169,12 @@ echo " Checked:"
 echo "   1. USB  → usb 0:1  (fatload)"
 echo "      Expected files: Image"
 echo "                      bcm2837-rpi-3-b-plus.dtb"
+echo "                      initramfs.uboot"
 echo ""
 echo "   2. TFTP → server 192.168.2.1"
 echo "      Expected files: Image"
 echo "                      bcm2837-rpi-3-b-plus.dtb"
+echo "                      initramfs.uboot"
 echo ""
 echo " Common causes:"
 echo "   - USB disk not connected, wrong partition number,"
