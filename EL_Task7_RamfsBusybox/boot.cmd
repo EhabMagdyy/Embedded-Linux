@@ -56,7 +56,7 @@ echo ""
 #                             NFS boot  → nfsroot=192.168.2.1:/path,v3 ip=dhcp
 # =============================================================================
 
-setenv bootargs "console=tty1 rw init=/init"
+setenv bootargs "console=tty1 rw rdinit=/init"
 
 
 # =============================================================================
