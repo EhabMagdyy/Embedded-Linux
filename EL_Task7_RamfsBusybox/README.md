@@ -1,6 +1,6 @@
 # RPi3b+ Kernel (with busybox rootsfs & `initramfs`)
 
-> 
+> ![Image](https://github.com/user-attachments/assets/46f140ad-e763-412d-8c96-1a1ad709f7d1)
 
 ---
 
@@ -25,11 +25,13 @@ here are the new things we did
    make menuconfig
    # in menuconfig
    ```
+   ```
    Settings → [*] Build static binary (no shared libs)
             └─> [ ] SHA1 hardware acceleration
             └─> [ ] SHA256 hardware acceleration
    Save & Exit
    ```
+   ``` bash
    make ARCH=arm64 \
      CROSS_COMPILE=~/x-tools/aarch64-rpi3-linux-gnu/bin/aarch64-rpi3-linux-gnu- \
      -j$(nproc)
@@ -62,7 +64,7 @@ here are the new things we did
    ```
 
 - Create `etc` directory & make your `inittab` script & `init.d/rcS`
-   ```
+   ``` bash
    sudo mkdir /srv/nfs/rootfs/etc
    sudo touch /srv/nfs/rootfs/etc/inittab
    sudo mkdir /srv/nfs/rootfs/etc/init.d
@@ -75,3 +77,9 @@ here are the new things we did
 ### 3. U-Boot setup
 in `boot.cmd` bootargs `init=/sbin/init`
 > the rest same as before
+
+---
+
+### 4. Run kernel as we did before
+
+---
