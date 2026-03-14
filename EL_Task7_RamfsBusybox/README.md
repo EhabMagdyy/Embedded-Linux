@@ -168,8 +168,16 @@ initramfs has no shared libraries (/lib) — a dynamically linked binary would p
 
 
 ### 5. Difference: initramfs vs initrd?
-initrd is an old block device image (ext2) mounted as a real disk — the kernel mounts it then pivot_roots. initramfs is a cpio archive extracted directly into a tmpfs — simpler, no block device needed, and is the modern standard.
-
+```
+initrd (old):                    initramfs (new):
+─────────────────────────────    ─────────────────────────────
+block device image               cpio archive
+mounted as ext2/tmpfs            extracted directly into tmpfs
+needs ramdisk driver             no driver needed
+fixed size allocation            grows/shrinks as needed
+slower                           faster
+legacy (still supported)         modern standard
+```
 
 ### 6. Where is initramfs loaded in memory? Who decompresses it?
 U-Boot loads it at ${ramdisk_addr_r} then passes the address to the kernel via DTB. The kernel itself decompresses and extracts it into a tmpfs at /.
