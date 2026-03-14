@@ -113,6 +113,8 @@ initramfs
 └── tmp
 ```
 
+---
+
 ### 2. Make it suitable to run using U-Boot
 - Archeive `cpio` & Compress `gz` & generate ramdisk file via `mkimage`
    ``` bash
@@ -127,10 +129,12 @@ initramfs
    sudo cp initramfs.uboot /srv/tftp/
    ```
 
+---
+
 ### 3. Setup boot.cmd
 - Change bootargs
   ```
-  setenv bootargs "console=tty1 rw init=/init"
+  setenv bootargs "console=tty1 rw rdinit=/init"
   ```
 
 - Load `initramfs.uboot`
@@ -142,3 +146,40 @@ initramfs
   ```
   booti ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r}
   ```
+
+---
+
+## Questions
+
+### 1. What is initramfs? Why use it instead of mounting the real rootfs directly?
+A small compressed filesystem loaded into RAM at boot before the real rootfs — used to do early setup (load drivers, mount logic) when then it can load the actual rootfs from (nfs/disk)
+
+
+### 2. Why cpio format for initramfs? Why not tar or zip?
+cpio is hardcoded into the kernel — the kernel's built-in initramfs extractor only understands cpio newc format.
+
+
+### 3. What does rdinit= do? What happens if wrong path?
+Tells the kernel which binary to run as PID 1 inside the initramfs. If wrong path - kernel panic: "requested rdinit not found".
+
+
+### 4. Why must init be statically linked? What if dynamic?
+initramfs has no shared libraries (/lib) — a dynamically linked binary would panic.
+
+
+### 5. Difference: initramfs vs initrd?
+initrd is an old block device image (ext2) mounted as a real disk — the kernel mounts it then pivot_roots. initramfs is a cpio archive extracted directly into a tmpfs — simpler, no block device needed, and is the modern standard.
+
+
+### 6. Where is initramfs loaded in memory? Who decompresses it?
+U-Boot loads it at ${ramdisk_addr_r} then passes the address to the kernel via DTB. The kernel itself decompresses and extracts it into a tmpfs at /.
+
+
+### 7. How does kernel switch from initramfs to real rootfs?
+Your init script calls switch_root /newroot /sbin/init — this pivots / to the real rootfs and re-execs init. If you stay in initramfs (like your setup), there is no switch — initramfs IS the final rootfs.
+
+---
+
+  #### You can remove your SD Card/USB Disk After U-boot runs!!
+  > https://github.com/user-attachments/assets/2d5dca95-fa27-4c9b-98f8-3b905312cbf8
+  
