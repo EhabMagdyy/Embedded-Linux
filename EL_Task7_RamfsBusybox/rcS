@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "=================================" > /dev/console
+echo "  Hello from Ehab's Kernel!"     > /dev/console
+echo "  Kernel: $(uname -r)"           > /dev/console
+echo "=================================" > /dev/console

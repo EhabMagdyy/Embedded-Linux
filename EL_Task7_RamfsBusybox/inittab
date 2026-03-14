@@ -1,0 +1,14 @@
+# mount virtual filesystems at boot
+::sysinit:mount -t proc proc /proc
+::sysinit:mount -t sysfs sys /sys
+::sysinit:mount -t tmpfs tmp /tmp
+
+# run startup scripts (just print a message from me (>_<))
+::sysinit:/etc/init.d/rcS
+
+ttyS0::respawn:/bin/sh
+
+::ctrlaltdel:/sbin/reboot
+
+::shutdown:/bin/umount -a -r
+::shutdown:/bin/swapoff -a
