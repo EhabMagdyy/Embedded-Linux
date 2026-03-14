@@ -176,7 +176,7 @@ U-Boot loads it at ${ramdisk_addr_r} then passes the address to the kernel via D
 
 
 ### 7. How does kernel switch from initramfs to real rootfs?
-Your init script calls switch_root /newroot /sbin/init — this pivots / to the real rootfs and re-execs init. If you stay in initramfs (like your setup), there is no switch — initramfs IS the final rootfs.
+init script calls `switch_root /newroot /sbin/init` — this pivots / to the real rootfs and re-execs init.
 
 ---
 
