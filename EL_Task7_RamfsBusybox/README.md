@@ -1,6 +1,10 @@
 # RPi3b+ Kernel (with busybox rootsfs & `initramfs`)
 
-> ![Image](https://github.com/user-attachments/assets/46f140ad-e763-412d-8c96-1a1ad709f7d1)
+> ![Image](https://github.com/user-attachments/assets/744cde5b-beb9-4edc-b09e-718415c18b14)
+
+> the first block of printed message is from `init` > `/etc/inittab` > `/etc/init.d/rcS`
+
+> the second block if from `/etc/profile` at the begining of starting `/bin/sh`, to validate that its working
 
 ---
 
