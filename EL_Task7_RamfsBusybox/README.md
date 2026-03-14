@@ -83,3 +83,58 @@ in `boot.cmd` bootargs `init=/sbin/init`
 ### 4. Run kernel as we did before
 
 ---
+
+## Second: after we run busybox rootfs using nfs, we need to run initramfs
+
+### 1. Create your initramfs folder
+```
+initramfs
+├── bin
+│   ├── busybox   # make other binaries soft link to it
+│   ├── cttyhack -> busybox    # assigns the console as a controlling terminal
+│   ├── echo -> busybox
+│   ├── ls -> busybox
+│   ├── mount -> busybox
+│   └── sh -> busybox
+├── dev
+├── etc
+│   ├── init.d
+│   │   └── rcS   # startup script — runs once at boot before shell spawns (disables logs on console, prints banner)
+│   ├── inittab   # BusyBox init config — mount {dev,sys,proc,temp}, run startup script, run shell, shutdown behavior
+│   └── profile   # shell init script — runs automatically when login shell starts (-l flag when running shell)
+├── init
+├── proc
+├── sbin
+├── sys
+└── tmp
+```
+
+### 2. Make it suitable to run using U-Boot
+- Archeive `cpio` & Compress `gz` & generate ramdisk file via `mkimage`
+   ``` bash
+   cd initramfs
+   find . | cpio -H newc -o | gzip > ../initramfs.cpio.gz
+   cd ..
+   ~/Documents/ITI_9Months/EmbeddedLinux/u-boot/tools/mkimage -A arm64 -T ramdisk -C gzip -d initramfs.cpio.gz initramfs.uboot
+   ```
+
+- But it in your tftp/disk to be loaded into DRAM
+   ``` bash
+   sudo cp initramfs.uboot /srv/tftp/
+   ```
+
+### 3. Setup boot.cmd
+- Change bootargs
+  ```
+  setenv bootargs "console=tty1 rw init=/init"
+  ```
+
+- Load `initramfs.uboot`
+  ```
+  tftp ${ramdisk_addr_r} initramfs.uboot
+  ```
+
+- Run kernel
+  ```
+  booti ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r}
+  ```
