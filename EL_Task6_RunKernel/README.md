@@ -149,7 +149,7 @@ sed -i 's/CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION="-Ehab-v1"/' ~/linux/.confi
 1. Change bootargs in your `boot.cmd`:
    ```
    # replace the current bootargs line with this:
-   setenv bootargs "console=ttyAMA0,115200 root=/dev/nfs nfsroot=192.168.2.1:/srv/nfs/rootfs,v3,tcp ip=192.168.2.2:192.168.2.1::255.255.255.0::eth0:off rw init=/init"
+   setenv bootargs "console=tty1,115200 root=/dev/nfs nfsroot=192.168.2.1:/srv/nfs/rootfs,v3,tcp ip=192.168.2.2:192.168.2.1::255.255.255.0::eth0:off rw init=/init"
    ```
 2. Then recompile and copy `boot.scr` into `boot` partition
 
