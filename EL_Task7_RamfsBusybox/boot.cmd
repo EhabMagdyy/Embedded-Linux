@@ -22,7 +22,8 @@
 #     usb 0:1/
 #     ├── Image
 #     ├── bcm2837-rpi-3-b-plus.dtb
-#     └── boot.scr                  ← here
+#     ├── initramfs.uboot
+#     └── boot.scr                  
 #
 # HOW IT RUNS AUTOMATICALLY:
 #   This board uses the modern U-Boot boot standard. bootcmd is already set to:
@@ -36,24 +37,6 @@
 #   NOTE: saveenv is NOT used here because the environment is stored on MMC
 #   and this setup boots exclusively from USB.
 #
-# =============================================================================
-
-echo ""
-echo "============================================="
-echo "   RPi3B+ Auto-Boot — $(date) "
-echo "   Order: [1] USB  →  [2] TFTP  →  [3] Error"
-echo "============================================="
-echo ""
-
-
-# =============================================================================
-# BOOT ARGUMENTS  (shared by both USB and TFTP boot paths)
-# =============================================================================
-#   console=tty1          → kernel messages on HDMI monitor
-#   console=ttyS1,115200  → also mirror to UART (remove if not using serial)
-#   root=                 → CHANGE this to match your root partition:
-#                             USB boot  → /dev/sda2   (typical)
-#                             NFS boot  → nfsroot=192.168.2.1:/path,v3 ip=dhcp
 # =============================================================================
 
 setenv bootargs "earlycon=bcm2835aux,0x3f215040 console=ttyS0,115200 8250.nr_uarts=1 ignore_loglevel keep_bootcon loglevel=8 rdinit=/init"
