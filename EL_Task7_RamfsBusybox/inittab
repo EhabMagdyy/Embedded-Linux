@@ -6,6 +6,6 @@
 # run startup script
 ::sysinit:/etc/init.d/rcS
 
-console::respawn:/bin/cttyhack /bin/sh -l   # in case of actual rootfs, use /bin/sh instead
+console::respawn:/bin/sh
 
 ::shutdown:/bin/umount -a -r

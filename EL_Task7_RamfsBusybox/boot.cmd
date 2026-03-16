@@ -56,7 +56,7 @@ echo ""
 #                             NFS boot  → nfsroot=192.168.2.1:/path,v3 ip=dhcp
 # =============================================================================
 
-setenv bootargs "console=tty1 rw rdinit=/init"
+setenv bootargs "earlycon=bcm2835aux,0x3f215040 console=ttyS0,115200 8250.nr_uarts=1 ignore_loglevel keep_bootcon loglevel=8 rdinit=/init"
 
 
 # =============================================================================
