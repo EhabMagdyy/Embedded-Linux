@@ -1,10 +1,6 @@
 # RPi3b+ Kernel (with busybox rootsfs & `initramfs`)
 
-> ![Image](https://github.com/user-attachments/assets/744cde5b-beb9-4edc-b09e-718415c18b14)
-
-> the first block of printed message is from `init` > `/etc/inittab` > `/etc/init.d/rcS`
-
-> the second block if from `/etc/profile` at the begining of starting `/bin/sh`, to validate that its working
+> <img width="1916" height="1077" alt="Image" src="https://github.com/user-attachments/assets/e2c49201-5285-4393-89c0-2ab7f847d1dd" />
 
 ---
 
@@ -99,13 +95,15 @@ initramfs
 │   ├── echo -> busybox
 │   ├── ls -> busybox
 │   ├── mount -> busybox
+│   ├── cat -> busybox
+│   ├── pwd -> busybox
+│   ├── uname -> busybox
 │   └── sh -> busybox
 ├── dev
 ├── etc
 │   ├── init.d
 │   │   └── rcS   # startup script — runs once at boot before shell spawns (disables logs on console, prints banner)
 │   ├── inittab   # BusyBox init config — mount {dev,sys,proc,temp}, run startup script, run shell, shutdown behavior
-│   └── profile   # shell init script — runs automatically when login shell starts (-l flag when running shell)
 ├── init
 ├── proc
 ├── sbin
@@ -134,7 +132,7 @@ initramfs
 ### 3. Setup boot.cmd
 - Change bootargs
   ```
-  setenv bootargs "console=tty1 rw rdinit=/init"
+  setenv bootargs "earlycon=bcm2835aux,0x3f215040 console=ttyS0,115200 8250.nr_uarts=1 ignore_loglevel keep_bootcon loglevel=8 rdinit=/init"
   ```
 
 - Load `initramfs.uboot`
@@ -144,7 +142,7 @@ initramfs
 
 - Run kernel
   ```
-  booti ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr_r}
+  source ${ramdisk_addr_r}
   ```
 
 ---
@@ -188,6 +186,4 @@ init script calls `switch_root /newroot /sbin/init` — this pivots / to the rea
 
 ---
 
-  #### You can remove your SD Card/USB Disk After U-boot runs!!
-  > https://github.com/user-attachments/assets/2d5dca95-fa27-4c9b-98f8-3b905312cbf8
-  
+  #### You can remove your SD Card/USB Disk After U-boot runs!!  
