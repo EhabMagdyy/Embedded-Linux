@@ -1,6 +1,20 @@
 # Initramfs-Based Root Filesystem Selection
 
-## 1. Creat ramfs's `init` script
+## 1. Setup your Disk
+<img width="882" height="563" alt="Image" src="https://github.com/user-attachments/assets/e1fb233b-4bf1-4e11-a6aa-f4fb5969d24c" />
+
+- Create two partitions using `cfdisk`
+- Format the Disk:
+  ``` bash
+  sudo mkfs.vfat -L BOOT /dev/sdb1
+  sudo mkfs.ext4 -L ROOTFS1 /dev/sdb2
+  sudo mkfs.ext4 -L ROOTFS2 /dev/sdb3
+  ```
+- Mount & Create the two `rootfs`
+
+---
+
+## 2. Creat ramfs's `init` script
 
 ``` bash
 #!/bin/sh
@@ -10,9 +24,7 @@ mount -t proc proc /proc
 mount -t sysfs sys /sys
 mount -t devtmpfs dev /dev
 
-echo "============================================"
 echo "   Initramfs: Root Filesystem Selector"
-echo "============================================"
 
 # i'm using usb disk, in case of SD card, it would be /dev/mmcblk0p2 and /dev/mmcblk0p3
 DEV_ROOT1="/dev/sda2"
@@ -104,3 +116,7 @@ initramfs/bin/
 ├── umount -> busybox
 └── uname -> busybox
 ```
+
+---
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/1c425744-e786-46d8-ac30-84e201e22619" />
