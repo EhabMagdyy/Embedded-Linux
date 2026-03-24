@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# suppress kernel messages from appearing on console afte> (incase of initramfs)
+echo 1 > /proc/sys/kernel/printk
+
+echo "=====================================" > /dev/console
+echo "  Hello from Ehab's initramfs!"        > /dev/console
+echo "  Feel free to unplug your SD Card"    > /dev/console
+echo "=====================================" > /dev/console

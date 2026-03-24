@@ -1,0 +1,5 @@
+boot/
+rootfs1/
+rootfs2/
+initramfs/
+initramfs*

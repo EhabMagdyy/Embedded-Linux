@@ -1,0 +1,10 @@
+::sysinit:mount -t proc proc /proc
+::sysinit:mount -t sysfs sys /sys
+::sysinit:mount -t tmpfs tmp /tmp
+
+# run startup script
+::sysinit:/etc/init.d/rcS
+
+console::respawn:/bin/sh
+
+::shutdown:/bin/umount -a -r
