@@ -19,20 +19,20 @@
 ``` bash
 #!/bin/sh
 
-# 1. Mount Essential Virtual Filesystems
+# 1. Mount Virtual Filesystems
 mount -t proc proc /proc
 mount -t sysfs sys /sys
 mount -t devtmpfs dev /dev
 
+echo "============================================"
 echo "   Initramfs: Root Filesystem Selector"
+echo "============================================"
 
-# i'm using usb disk, in case of SD card, it would be /dev/mmcblk0p2 and /dev/mmcblk0p3
 DEV_ROOT1="/dev/sda2"
 DEV_ROOT2="/dev/sda3"
 
-# 2. Wait for USB/SD Device Detection
+# 2. Wait for USB Device Detection
 echo "Waiting for storage device to settle..."
-# Loop until the partitions appear in /dev
 while [ ! -b "$DEV_ROOT1" ] || [ ! -b "$DEV_ROOT2" ]; do
     echo "Polling for $DEV_ROOT1 and $DEV_ROOT2..."
     sleep 1
@@ -50,13 +50,9 @@ echo -n "Enter choice [1/2]: "
 read choice
 
 case $choice in
-    1)
-        ROOT_DEV=$DEV_ROOT1
-        ;;
-    2)
-        ROOT_DEV=$DEV_ROOT2
-        ;;
-    *)
+    1) ROOT_DEV=$DEV_ROOT1 ;;
+    2) ROOT_DEV=$DEV_ROOT2 ;;
+    *) 
         echo "Invalid input. Defaulting to RootFS 1."
         ROOT_DEV=$DEV_ROOT1
         ;;
@@ -65,10 +61,8 @@ esac
 # 4. Mount Selected Partition
 echo "Mounting $ROOT_DEV to /mnt/root..."
 
-# Create mount point
 mkdir -p /mnt/root
 
-# Attempt to mount
 if mount -t ext4 $ROOT_DEV /mnt/root; then
     echo "Mount successful."
 else
@@ -79,15 +73,23 @@ fi
 # 5. Switch Root
 echo "Switching root to $ROOT_DEV..."
 
-# Clean up virtual filesystems so the new OS can mount its own
+# Clean up virtual filesystems
 umount /proc
 umount /sys
-umount /dev
 
-# Execute switch_root to transition to the new root filesystem
+# Move /dev to new root (Prevents the "can't open /dev/ttyS0" error)
+if [ -d /mnt/root/dev ]; then
+    mount --move /dev /mnt/root/dev
+    echo "/dev moved to new root."
+else
+    umount /dev
+    echo "Warning: /dev does not exist in new root. Continuing without moving /dev."
+fi
+
+# Switch to new root
 exec switch_root /mnt/root /sbin/init
 
-# If switch_root fails, we fall back to shell
+# Fallback
 echo "FATAL: switch_root failed. Dropping to shell."
 exec /bin/sh
 ```
@@ -119,4 +121,5 @@ initramfs/bin/
 
 ---
 
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/1c425744-e786-46d8-ac30-84e201e22619" />
+<img width="1920" height="1080" alt="DualRootFS" src="https://github.com/user-attachments/assets/cc13fe90-fdec-4977-8fe8-2815c7660c4c" />
+
