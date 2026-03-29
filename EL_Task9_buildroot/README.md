@@ -1,5 +1,9 @@
 # Creating RPi 3b+ image using buildroot
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/78ee528b-3386-472d-8018-0ec969b0cdac" />
+
+---
+
 ## 1. Download buidlroot
 ``` bash
 git clone https://github.com/buildroot/buildroot.git
@@ -18,9 +22,21 @@ make -j16   # took an hour with me
 
 ## 3. Flash image on your Disk
 ``` bash
-sudo dd if=output/images/sdcard.img of=/dev/sdb bs=16M
-sync
+sudo dd if=output/images/sdcard.img of=/dev/sdb bs=16M conv=fsync
 ```
+
+## To enable ssh
+- Make sure you have these checked in `/etc/ssh/sshd_config`:
+  ``` bash
+  PermitRootLogin yes
+  PasswordAuthentication yes
+  ```
+  
+- assign an ip address to the ethernet interface:
+  ``` bash
+  ip addr add <ipaddr> dev eth0
+  ip link set eth0 up
+  ```
 
 ---
 
