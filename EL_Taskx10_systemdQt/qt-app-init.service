@@ -1,0 +1,13 @@
+[Unit]
+Description=Qt app environment preparation
+After=mnt-appdata.mount network-online.target
+Requires=mnt-appdata.mount
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'mkdir -p /tmp/qt-runtime && echo "Init OK" > /tmp/qt-runtime/status.txt'
+
+[Install]
+WantedBy=qt-app.target

@@ -1,0 +1,8 @@
+[Unit]
+Description=Qt Calculator app Target
+Requires=mnt-appdata.mount qt-app-init.service qt-app.service network-online.target
+After=mnt-appdata.mount qt-app-init.service network-online.target
+Wants=qt-app.service
+
+[Install]
+WantedBy=graphical.target

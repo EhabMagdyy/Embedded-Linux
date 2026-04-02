@@ -1,0 +1,12 @@
+[Unit]
+Description=Dummy loop mount for Qt app
+Before=qt-app-init.service
+
+[Mount]
+What=/home/pi/loopmount.img
+Where=/mnt/appdata
+Type=ext4
+Options=loop
+
+[Install]
+WantedBy=qt-app.target

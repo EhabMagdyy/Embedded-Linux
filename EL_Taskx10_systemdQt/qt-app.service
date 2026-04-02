@@ -1,0 +1,15 @@
+[Unit]
+Description=Qt Weather Application
+After=qt-app-init.service network-online.target
+Requires=qt-app-init.service
+RequiresMountsFor=/mnt/appdata
+
+[Service]
+Type=simple
+User=pi
+Environment=DISPLAY=:0
+ExecStart=/home/pi/appTask04_Weather
+Restart=on-failure
+
+[Install]
+WantedBy=qt-app.target
