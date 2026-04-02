@@ -1,0 +1,6 @@
+config BR2_PACKAGE_QTCALCULATOR
+	bool "qtcalculator"
+	depends on BR2_PACKAGE_QT6BASE
+	depends on BR2_PACKAGE_QT6DECLARATIVE
+	help
+	  My custom Qt6/QML Calculator
