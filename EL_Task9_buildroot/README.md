@@ -71,14 +71,28 @@ appTask02_Calculator    # that the app name (from CMakeList.txt)
 
 ## 4. Flash image on your Disk
 ``` bash
-# Wipe the old partition table and sectors
-sudo wipefs -a /dev/sdX
+# Unmount everything on the disk first
+sudo umount /dev/sdb1 2>/dev/null
+sudo umount /dev/sdb2 2>/dev/null
+
+# Wipe the partition table and first sectors completely
+sudo wipefs -a /dev/sdb
+
+# Zero out the first 100MB to be sure
+sudo dd if=/dev/zero of=/dev/sdb bs=1M count=100 conv=fsync
+
+# Confirm disk is clean
+sudo fdisk -l /dev/sdb
+# Should show: no partition table
 
 # Flash the new image
-sudo dd if=output/images/sdcard.img of=/dev/sdX bs=16M conv=fsync status=progress
+sudo dd if=output/images/sdcard.img of=/dev/sdb bs=16M conv=fsync status=progress
+
+# Force kernel to re-read partition table
+sudo partprobe /dev/sdb
 
 # Verify partitions were created correctly
-sudo fdisk -l /dev/sdX
+sudo fdisk -l /dev/sdb
 
 # Eject and remove your SD Card/USB Disk
 sudo eject /dev/sdX
@@ -94,10 +108,14 @@ export QT_QPA_PLATFORM=linuxfb
 appTask02_Calculator
 ```
 
+---
+
 ## Still having font problems? Copy Dejavue from host (you will need to enable ssh)
 ``` bash
 scp -r /usr/share/fonts/truetype/dejavu/ root@<ipaddr>:/usr/lib/fonts/
 ```
+
+---
 
 ## To enable ssh
 ### - Make sure you have these checked in `/etc/ssh/sshd_config`:
@@ -111,6 +129,25 @@ scp -r /usr/share/fonts/truetype/dejavu/ root@<ipaddr>:/usr/lib/fonts/
   ip addr add <ipaddr> dev eth0
   ip link set eth0 up
   ```
+
+---
+
+## BOOT partition is small (needs to be more than 32MB)
+``` bash
+# Open the template
+nano board/raspberrypi/genimage.cfg.in
+```
+
+```
+Find and change `size = 32M` to `size = 64M`:
+
+image boot.vfat {
+    vfat {
+        ...
+    }
+    size = 64M    <= change from 32M
+}
+```
 
 ---
 
