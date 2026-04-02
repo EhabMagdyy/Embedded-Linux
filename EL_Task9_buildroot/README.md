@@ -94,10 +94,14 @@ export QT_QPA_PLATFORM=linuxfb
 appTask02_Calculator
 ```
 
+---
+
 ## Still having font problems? Copy Dejavue from host (you will need to enable ssh)
 ``` bash
 scp -r /usr/share/fonts/truetype/dejavu/ root@<ipaddr>:/usr/lib/fonts/
 ```
+
+---
 
 ## To enable ssh
 ### - Make sure you have these checked in `/etc/ssh/sshd_config`:
@@ -111,6 +115,25 @@ scp -r /usr/share/fonts/truetype/dejavu/ root@<ipaddr>:/usr/lib/fonts/
   ip addr add <ipaddr> dev eth0
   ip link set eth0 up
   ```
+
+---
+
+## BOOT partition is small (needs to be more than 32MB)
+``` bash
+# Open the template
+nano board/raspberrypi/genimage.cfg.in
+```
+
+```
+Find and change `size = 32M` to `size = 64M`:
+
+image boot.vfat {
+    vfat {
+        ...
+    }
+    size = 64M    <= change from 32M
+}
+```
 
 ---
 
