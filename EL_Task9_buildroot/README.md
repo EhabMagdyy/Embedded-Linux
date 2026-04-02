@@ -71,14 +71,28 @@ appTask02_Calculator    # that the app name (from CMakeList.txt)
 
 ## 4. Flash image on your Disk
 ``` bash
-# Wipe the old partition table and sectors
-sudo wipefs -a /dev/sdX
+# Unmount everything on the disk first
+sudo umount /dev/sdb1 2>/dev/null
+sudo umount /dev/sdb2 2>/dev/null
+
+# Wipe the partition table and first sectors completely
+sudo wipefs -a /dev/sdb
+
+# Zero out the first 100MB to be sure
+sudo dd if=/dev/zero of=/dev/sdb bs=1M count=100 conv=fsync
+
+# Confirm disk is clean
+sudo fdisk -l /dev/sdb
+# Should show: no partition table
 
 # Flash the new image
-sudo dd if=output/images/sdcard.img of=/dev/sdX bs=16M conv=fsync status=progress
+sudo dd if=output/images/sdcard.img of=/dev/sdb bs=16M conv=fsync status=progress
+
+# Force kernel to re-read partition table
+sudo partprobe /dev/sdb
 
 # Verify partitions were created correctly
-sudo fdisk -l /dev/sdX
+sudo fdisk -l /dev/sdb
 
 # Eject and remove your SD Card/USB Disk
 sudo eject /dev/sdX
