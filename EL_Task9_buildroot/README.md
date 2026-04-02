@@ -1,15 +1,15 @@
-# Creating RPi 3b+ image using buildroot
+# Creating Qt app for RPi 3b+ image using buildroot
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/78ee528b-3386-472d-8018-0ec969b0cdac" />
-
----
+## [Demo Video](https://drive.google.com/file/d/1xk5odUrtoB0hmnGsfoXKL2U7VtUm3zpx/view?usp=sharing)
 
 ## 1. Download buidlroot
 ``` bash
 git clone https://github.com/buildroot/buildroot.git
 ```
 
-## 2. Build RPi3 64 board config
+---
+
+## 2. Configure buildroot for RPi3 64 board
 ``` bash
 cd buildroot
 # to list the available boards
@@ -17,22 +17,96 @@ ls configs/
 make raspberrypi3_64_defconfig
 # Customize your image
 make menuconfig
-make -j16   # took an hour with me
 ```
 
-## 3. Flash image on your Disk
+---
+
+## 3. Create your Qt application & added into packages
+### - Create Qt app package
 ``` bash
-sudo dd if=output/images/sdcard.img of=/dev/sdb bs=16M conv=fsync
+ehab@HP:~/buildroot$ tree package/qtcalculator/
+package/qtcalculator/
+├── CMakeLists.txt
+├── Config.in           # Kconfig menu entry — defines the package option shown in menuconfig (bool, depends on, select, help text)
+├── qtcalculator.mk     # Buildroot package recipe — defines how to fetch, configure, build and install the package (version, site, dependencies, cmake flags)
+├── main.cpp
+├── Main.qml
+├── MButton.qml
+└── resources.qrc
+```
+
+---
+
+### - Add the packdge to menuconfig
+``` bash
+ehab@HP:~/buildroot$ cat package/Config.in | head
+menu "Target packages"
+
+	source "package/busybox/Config.in"
+	source "package/skeleton/Config.in"
+	source "package/skeleton-custom/Config.in"
+	source "package/skeleton-init-common/Config.in"
+	source "package/skeleton-init-none/Config.in"
+	source "package/skeleton-init-openrc/Config.in"
+	source "package/skeleton-init-systemd/Config.in"
+	source "package/skeleton-init-sysv/Config.in"
+```
+
+### - Enable Qt packages & DejaVu fonts
+```
+Target Packages > Graphics libraries and applications > Qt6
+Target packages > Fonts, cursors, icons, sounds and themes > Dejavue
+```
+
+### - Build to generate your image
+``` bash
+make -j16
+
+# Make sure you qt app added to the binaries
+ehab@HP:~/buildroot$ ls output/target/usr/bin/ | grep Calc
+appTask02_Calculator    # that the app name (from CMakeList.txt)
+```
+
+---
+
+## 4. Flash image on your Disk
+``` bash
+# Wipe the old partition table and sectors
+sudo wipefs -a /dev/sdX
+
+# Flash the new image
+sudo dd if=output/images/sdcard.img of=/dev/sdX bs=16M conv=fsync status=progress
+
+# Verify partitions were created correctly
+sudo fdisk -l /dev/sdX
+
+# Eject and remove your SD Card/USB Disk
+sudo eject /dev/sdX
+```
+
+---
+
+## 5. inside RPi
+``` bash
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
+export QT_QPA_PLATFORM=linuxfb
+appTask02_Calculator
+```
+
+## Still having font problems? Copy Dejavue from the host (you will need to enable ssh for this)
+``` bash
+scp -r /usr/share/fonts/truetype/dejavu/ root@<ipaddr>:/usr/lib/fonts/
 ```
 
 ## To enable ssh
-- Make sure you have these checked in `/etc/ssh/sshd_config`:
+### - Make sure you have these checked in `/etc/ssh/sshd_config`:
   ``` bash
   PermitRootLogin yes
   PasswordAuthentication yes
   ```
   
-- assign an ip address to the ethernet interface:
+### - assign an ip address to the ethernet interface:
   ``` bash
   ip addr add <ipaddr> dev eth0
   ip link set eth0 up
