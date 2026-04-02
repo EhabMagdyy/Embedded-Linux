@@ -135,7 +135,9 @@ sudo mkdir -p /mnt/appdata
 sudo systemctl enable --now systemd-networkd
 ```
 
-### 4. Enable all units
+---
+
+### 3. Enable all units
 
 ```bash
 sudo systemctl daemon-reload
@@ -148,7 +150,7 @@ sudo systemctl enable qt-app.target
 
 ---
 
-### 5. Start and verify without rebooting
+### 4. Start and verify without rebooting
 
 ```bash
 sudo systemctl start qt-app.target
@@ -159,7 +161,7 @@ systemctl status qt-app.service
 systemctl status qt-app.target
 ```
 
-### 6. Verify the dependency chain
+### 5. Verify the dependency chain
 
 ```bash
 systemctl list-dependencies qt-app.target
@@ -179,7 +181,7 @@ qt-app.target
 
 ---
 
-### 3. Fix RPi DNS & Network Setup (Laptop as Gateway) if needed
+### 6. Fix RPi DNS & Network Setup (Laptop as Gateway) if needed
 
 ### On the RPi
 ```bash
