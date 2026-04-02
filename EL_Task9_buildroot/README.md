@@ -94,7 +94,7 @@ export QT_QPA_PLATFORM=linuxfb
 appTask02_Calculator
 ```
 
-## Still having font problems? Copy Dejavue from the host (you will need to enable ssh for this)
+## Still having font problems? Copy Dejavue from host (you will need to enable ssh)
 ``` bash
 scp -r /usr/share/fonts/truetype/dejavu/ root@<ipaddr>:/usr/lib/fonts/
 ```
