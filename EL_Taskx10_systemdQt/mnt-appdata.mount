@@ -1,6 +1,5 @@
 [Unit]
 Description=Dummy loop mount for Qt app
-Before=qt-app-init.service
 
 [Mount]
 What=/home/pi/loopmount.img

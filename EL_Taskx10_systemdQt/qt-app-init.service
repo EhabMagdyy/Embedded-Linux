@@ -2,7 +2,6 @@
 Description=Qt app environment preparation
 After=mnt-appdata.mount network-online.target
 Requires=mnt-appdata.mount
-Wants=network-online.target
 
 [Service]
 Type=oneshot

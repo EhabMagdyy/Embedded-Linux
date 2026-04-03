@@ -2,6 +2,7 @@
 Description=Qt Weather Application
 After=qt-app-init.service network-online.target
 Requires=qt-app-init.service
+Wants=network-online.target
 RequiresMountsFor=/mnt/appdata
 
 [Service]
